@@ -25,7 +25,7 @@ function M.setup(user_config)
                 name = opts.args,
                 cmd = opts.args,
                 vim_navigation = false,
-                quit_key = true -- Enable quit key for ad-hoc commands
+                quit_key = true  -- Use default quit_key setting
             })
         else
             if has_telescope() then

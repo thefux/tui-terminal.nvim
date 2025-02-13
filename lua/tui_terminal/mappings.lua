@@ -20,7 +20,7 @@ function M.setup_mappings(buf, win, tool)
         vim.api.nvim_win_close(win, true)
     end, close_opts)
 
-    if tool.quit_key then
+    if tool.quit_key ~= false then
         vim.keymap.set('t', 'q', function()
             vim.api.nvim_win_close(win, true)
         end, close_opts)

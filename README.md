@@ -44,7 +44,7 @@ require("tui_terminal").setup({
     tools = {
         {
             name = "glim",    -- Tool identifier
-            cmd = "glim",     -- Command to execute (vim_navigation and quit_key are true by default)
+            cmd = "glim",     -- Both vim_navigation and quit_key default to true
         },
         {
             name = "htop",
@@ -125,8 +125,8 @@ require("tui_terminal").setup({
    require("tui_terminal").setup({
        tools = {
            -- Tools that work better with vim navigation
-           { name = "glim", cmd = "glim" },     -- Uses default settings
-           { name = "btop", cmd = "btop" },     -- Uses default settings
+           { name = "glim", cmd = "glim" },     -- Both vim_navigation and quit_key are true by default
+           { name = "btop", cmd = "btop" },     -- Uses all default settings
 
            -- Tools that need their native key bindings (including 'q')
            { name = "lazygit", cmd = "lazygit", vim_navigation = false, quit_key = false },

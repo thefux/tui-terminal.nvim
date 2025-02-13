@@ -1,12 +1,10 @@
 local M = {}
 
 M.defaults = {
-    tools = {},
     -- Window dimensions as percentage of screen (0.0 to 1.0)
     width = 0.9,  -- 90% of screen width by default
     height = 0.9, -- 90% of screen height by default
-    tools = {
-    },
+    tools = {},
     border = {
         -- Can be "none", "single", "double", "rounded", "solid", "shadow", or "custom"
         type = "rounded",
