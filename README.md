@@ -17,10 +17,15 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 ```lua
 {
     "yourusername/tui_terminal.nvim",
+    dependencies = {
+        "nvim-telescope/telescope.nvim", -- Optional: for tool selection
+    },
     config = function()
         require("tui_terminal").setup({
             -- your configuration here
         })
+        -- Optional: Setup telescope extension
+        require("telescope").load_extension("tui_terminal")
     end
 }
 ```
@@ -87,15 +92,18 @@ require("tui_terminal").setup({
    :TuiTerminal
    ```
 
+> If Telescope is installed, this will open a picker to select from your configured tools
+
 2. Open a specific configured tool:
 
    ```vim
    :TuiTerminal lazygit
    ```
 
-3. Run any command in a floating window:
+3. Open Telescope picker directly:
+
    ```vim
-   :TuiTerminal htop
+   :Telescope tui_terminal
    ```
 
 ## ⌨️ Default Keymaps

@@ -3,6 +3,12 @@ local window = require('tui_terminal.window')
 
 local M = {}
 
+-- Function to check if telescope is available
+local function has_telescope()
+    local ok, _ = pcall(require, "telescope")
+    return ok
+end
+
 function M.setup(user_config)
     config.setup(user_config)
 
@@ -22,7 +28,11 @@ function M.setup(user_config)
                 quit_key = true -- Enable quit key for ad-hoc commands
             })
         else
-            window.open_floating_terminal(tools[1])
+            if has_telescope() then
+                require("telescope").extensions.tui_terminal.tui_terminal()
+            else
+                window.open_floating_terminal(tools[1])
+            end
         end
     end, { nargs = "?" })
 end
