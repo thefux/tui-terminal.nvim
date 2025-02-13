@@ -3,7 +3,6 @@ local window = require('tui_terminal.window')
 
 local M = {}
 
--- Function to check if telescope is available
 local function has_telescope()
     local ok, _ = pcall(require, "telescope")
     return ok
@@ -25,7 +24,7 @@ function M.setup(user_config)
                 name = opts.args,
                 cmd = opts.args,
                 vim_navigation = false,
-                quit_key = true  -- Use default quit_key setting
+                quit_key = true -- Use default quit_key setting
             })
         else
             if has_telescope() then

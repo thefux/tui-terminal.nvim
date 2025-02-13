@@ -6,10 +6,6 @@ A Neovim plugin that makes your terminal UI applications float like a butterfly 
 
 Ever wanted your terminal applications to float gracefully above your code like a majestic butterfly? Well, now they can! TUI Terminal creates a beautiful floating window for your favorite terminal UI applications.
 
-> Q: Why did the TUI terminal float?
->
-> A: Because it refused to sink to the bottom of the screen! 🥁
-
 ## 📦 Installation
 
 Using [lazy.nvim](https://github.com/folke/lazy.nvim):
@@ -115,10 +111,6 @@ require("tui_terminal").setup({
 - `<C-c>` - Force close the floating window (will not detach)
 - `q` - Close the floating window (when quit_key is true)
 - `<C-d>` - Detach the window (keep buffer running in background)
-
-> Q: What's a terminal's favorite dance move?
->
-> A: The float! 💃
 
 ## 🎨 Customization Tips
 

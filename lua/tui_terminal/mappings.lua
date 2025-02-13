@@ -19,22 +19,17 @@ function M.setup_mappings(buf, win, tool)
 
     local close_opts = { buffer = buf, noremap = true, silent = true }
 
-    -- Clear any existing mappings for this buffer
     pcall(vim.keymap.del, 't', '<C-c>', { buffer = buf })
     pcall(vim.keymap.del, 't', '<C-d>', { buffer = buf })
     pcall(vim.keymap.del, 't', 'q', { buffer = buf })
 
     vim.keymap.set('t', '<C-c>', function()
-        -- First, remove from detached list
         utils.remove_detached_buffer(buf)
 
-        -- Then mark as not detached and set to wipe
         vim.b[buf].tui_detach = false
 
-        -- Stop the terminal job
         pcall(vim.api.nvim_buf_delete, buf, { force = true })
 
-        -- Finally close the window if it's still valid
         if api.nvim_win_is_valid(win) then
             api.nvim_win_close(win, true)
         end
