@@ -29,7 +29,7 @@ function M.setup(user_config)
             })
         else
             if has_telescope() then
-                require("telescope").extensions.tui_terminal.tui_terminal()
+                require("telescope").extensions.tui_terminal.tools()
             else
                 window.open_floating_terminal(tools[1])
             end

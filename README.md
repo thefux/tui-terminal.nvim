@@ -56,6 +56,7 @@ require("tui_terminal").setup({
             cmd = "lazygit",
             vim_navigation = false,
             quit_key = false,        -- Disable 'q' as lazygit uses it
+            detach = true,          -- Enable detaching by default (can still force close with <C-c>)
         },
         {
             name = "nu",
@@ -104,14 +105,16 @@ require("tui_terminal").setup({
 
    ```vim
    :Telescope tui_terminal
+   :Telescope tui_terminal_detached  # List detached buffers
    ```
 
 ## ⌨️ Default Keymaps
 
 - `<Esc>` - Passes through to the terminal application
 - `hjkl` - Arrow key navigation (when vim_navigation is true)
-- `<C-c>` - Close the floating window
+- `<C-c>` - Force close the floating window (will not detach)
 - `q` - Close the floating window (when quit_key is true)
+- `<C-d>` - Detach the window (keep buffer running in background)
 
 > Q: What's a terminal's favorite dance move?
 >

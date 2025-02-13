@@ -5,6 +5,8 @@ M.defaults = {
     width = 0.9,  -- 90% of screen width by default
     height = 0.9, -- 90% of screen height by default
     tools = {},
+    -- Store detached buffers
+    detached_buffers = {},
     border = {
         -- Can be "none", "single", "double", "rounded", "solid", "shadow", or "custom"
         type = "rounded",
