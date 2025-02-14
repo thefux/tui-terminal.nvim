@@ -1,10 +1,31 @@
 local M = {}
 local utils = require('tui_terminal.utils')
+local window_manager = require('tui_terminal.window_manager')
 local api = vim.api
 
 function M.setup_mappings(buf, win, tool)
-    vim.api.nvim_buf_set_keymap(buf, 't', '<Esc>', '<Esc>',
-        { noremap = true, silent = true })
+    -- Use Esc to toggle between terminal and normal mode
+    vim.keymap.set('t', '<Esc>', function()
+        vim.cmd('stopinsert')
+    end, { buffer = buf, noremap = true, silent = true })
+
+    -- Use 'i' or 'a' in normal mode to enter terminal mode
+    vim.keymap.set('n', 'i', function()
+        vim.cmd('startinsert')
+    end, { buffer = buf, noremap = true, silent = true })
+
+    vim.keymap.set('n', 'a', function()
+        vim.cmd('startinsert')
+    end, { buffer = buf, noremap = true, silent = true })
+
+    -- Window navigation
+    vim.keymap.set('t', '<A-n>', function()
+        window_manager.cycle_windows('next')
+    end, { buffer = buf, noremap = true, silent = true })
+
+    vim.keymap.set('t', '<A-p>', function()
+        window_manager.cycle_windows('prev')
+    end, { buffer = buf, noremap = true, silent = true })
 
     if tool.vim_navigation then
         vim.api.nvim_buf_set_keymap(buf, 't', 'h', '<Left>',
@@ -25,11 +46,9 @@ function M.setup_mappings(buf, win, tool)
 
     vim.keymap.set('t', '<C-c>', function()
         utils.remove_detached_buffer(buf)
-
+        window_manager.remove_window(win)
         vim.b[buf].tui_detach = false
-
         pcall(vim.api.nvim_buf_delete, buf, { force = true })
-
         if api.nvim_win_is_valid(win) then
             api.nvim_win_close(win, true)
         end

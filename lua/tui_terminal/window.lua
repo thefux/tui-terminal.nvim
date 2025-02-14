@@ -1,6 +1,7 @@
 local config = require('tui_terminal.config')
 local mappings = require('tui_terminal.mappings')
 local utils = require('tui_terminal.utils')
+local window_manager = require('tui_terminal.window_manager')
 local api = vim.api
 
 local M = {}
@@ -64,8 +65,13 @@ function M.restore_detached_buffer(stored_buf)
 
     local win = api.nvim_open_win(buf, true, get_window_config())
     mappings.setup_mappings(buf, win, stored_buf.tool)
-    vim.cmd("startinsert")
     vim.b[buf].tui_detach = false -- Clear detach flag upon restoration
+
+    -- Schedule entering insert mode to ensure it works
+    vim.schedule(function()
+        vim.cmd('startinsert')
+    end)
+
     return true
 end
 
@@ -92,6 +98,9 @@ function M.open_floating_terminal(tool)
     vim.b[buf].tui_detach = tool.detach or false
 
     local win = vim.api.nvim_open_win(buf, true, get_window_config())
+
+    -- Add window to manager
+    window_manager.add_window(win, buf, tool)
 
     vim.fn.termopen(tool.cmd, { cwd = vim.fn.getcwd() })
     vim.cmd("startinsert")

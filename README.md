@@ -111,6 +111,8 @@ require("tui_terminal").setup({
 - `<C-c>` - Force close the floating window (will not detach)
 - `q` - Close the floating window (when quit_key is true)
 - `<C-d>` - Detach the window (keep buffer running in background)
+- `<A-n>` - Cycle to next floating window
+- `<A-p>` - Cycle to previous floating window
 
 ## 🎨 Customization Tips
 
