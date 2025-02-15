@@ -4,7 +4,18 @@ M.defaults = {
     -- Window dimensions as percentage of screen (0.0 to 1.0)
     width = 0.9,  -- 90% of screen width by default
     height = 0.9, -- 90% of screen height by default
-    tools = {},
+    tools = {
+        -- Example of a tool with arguments and pre-command
+        {
+            name = "custom-tool",
+            cmd = "mytool",
+            args = {
+                default = "-f --color",  -- Default arguments
+                prompt = true,           -- Prompt for additional arguments
+            },
+            pre_cmd = "source ~/.toolrc", -- Script/command to run before starting the tool
+        }
+    },
     -- Store detached buffers
     detached_buffers = {},
     border = {

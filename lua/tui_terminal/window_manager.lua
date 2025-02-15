@@ -26,10 +26,10 @@ end
 -- Get next/previous window
 function M.cycle_windows(direction)
     if #M.active_windows <= 1 then return end
-    
+
     local current_win = vim.api.nvim_get_current_win()
     local current_idx = nil
-    
+
     -- Find current window index
     for i, w in ipairs(M.active_windows) do
         if w.win == current_win then
@@ -37,7 +37,7 @@ function M.cycle_windows(direction)
             break
         end
     end
-    
+
     if current_idx then
         local next_idx
         if direction == 'next' then
@@ -45,7 +45,7 @@ function M.cycle_windows(direction)
         else
             next_idx = (current_idx - 2) % #M.active_windows + 1
         end
-        
+
         local next_win = M.active_windows[next_idx].win
         if vim.api.nvim_win_is_valid(next_win) then
             vim.api.nvim_set_current_win(next_win)
@@ -57,4 +57,4 @@ function M.cycle_windows(direction)
     end
 end
 
-return M 
+return M

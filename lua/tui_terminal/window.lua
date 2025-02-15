@@ -55,6 +55,30 @@ local function setup_autocmds(buf, win)
     })
 end
 
+local function build_command(tool)
+    local cmd = tool.cmd
+
+    -- Add default arguments if they exist
+    if tool.args and tool.args.default then
+        cmd = cmd .. " " .. tool.args.default
+    end
+
+    -- If prompt is enabled, ask for additional arguments
+    if tool.args and tool.args.prompt then
+        local additional_args = vim.fn.input("Additional arguments: ")
+        if additional_args ~= "" then
+            cmd = cmd .. " " .. additional_args
+        end
+    end
+
+    -- Construct the final command with pre_cmd if it exists
+    if tool.pre_cmd then
+        cmd = tool.pre_cmd .. " && " .. cmd
+    end
+
+    return cmd
+end
+
 function M.restore_detached_buffer(stored_buf)
     local buf = stored_buf.buf
 
@@ -102,7 +126,8 @@ function M.open_floating_terminal(tool)
     -- Add window to manager
     window_manager.add_window(win, buf, tool)
 
-    vim.fn.termopen(tool.cmd, { cwd = vim.fn.getcwd() })
+    local cmd = build_command(tool)
+    vim.fn.termopen(cmd, { cwd = vim.fn.getcwd() })
     vim.cmd("startinsert")
 
     mappings.setup_mappings(buf, win, tool)

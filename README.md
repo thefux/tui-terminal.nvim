@@ -43,6 +43,23 @@ require("tui_terminal").setup({
             cmd = "glim",     -- Both vim_navigation and quit_key default to true
         },
         {
+            name = "custom-grep",
+            cmd = "rg",
+            args = {
+                default = "--color=always --line-number",  -- Default arguments
+                prompt = true,  -- Will prompt for additional arguments
+            },
+        },
+        {
+            name = "dev-tool",
+            cmd = "tool",
+            pre_cmd = "source ~/.toolrc && export TOOL_ENV=dev",  -- Setup environment
+            args = {
+                default = "--dev",
+                prompt = true,
+            },
+        },
+        {
             name = "htop",
             cmd = "htop",
             vim_navigation = false,   -- Disable vim navigation for native key handling
@@ -102,6 +119,13 @@ require("tui_terminal").setup({
    ```vim
    :Telescope tui_terminal
    :Telescope tui_terminal_detached  # List detached buffers
+   ```
+
+4. Open a tool with arguments:
+
+   ```vim
+   :TuiTerminal custom-grep
+   " > Additional arguments: search_term *.lua
    ```
 
 ## ⌨️ Default Keymaps

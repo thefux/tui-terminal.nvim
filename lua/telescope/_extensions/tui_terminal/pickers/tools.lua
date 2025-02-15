@@ -31,9 +31,18 @@ return function(opts)
         finder = finders.new_table({
             results = tools,
             entry_maker = function(tool)
+                local display = tool.name
+                if tool.args then
+                    if tool.args.default then
+                        display = display .. " [" .. tool.args.default .. "]"
+                    end
+                    if tool.args.prompt then
+                        display = display .. " [+args]"
+                    end
+                end
                 return {
                     value = tool,
-                    display = tool.name,
+                    display = display,
                     ordinal = tool.name,
                 }
             end,
