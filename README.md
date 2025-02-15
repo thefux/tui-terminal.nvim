@@ -247,6 +247,8 @@ require("tui_terminal").setup({
 
 You can create base configurations and inherit from them to avoid repetition:
 
+💡 Check out [INHERITANCE_EXAMPLES.md](./docs/INHERITANCE_EXAMPLES.md) for more advanced inheritance examples!
+
 ```lua
 require("tui_terminal").setup({
     tools = {
