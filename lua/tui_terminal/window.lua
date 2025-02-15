@@ -58,6 +58,24 @@ end
 local function build_command(tool)
     local cmd = tool.cmd
 
+    -- Handle pre-command script execution
+    if tool.pre_cmd then
+        -- Handle script with potential arguments
+        if type(tool.pre_cmd) == "table" then
+            local script = tool.pre_cmd.script
+            local args = tool.pre_cmd.args or ""
+
+            -- Execute the script with its arguments, then run the command
+            cmd = string.format("bash %s %s && %s", script, args, cmd)
+            -- If pre_cmd is a path to a script
+        elseif type(tool.pre_cmd) == "string" and tool.pre_cmd:match("%.sh$") then
+            cmd = string.format("bash %s && %s", tool.pre_cmd, cmd)
+        else
+            -- Regular pre-command (not a script)
+            cmd = tool.pre_cmd .. " && " .. cmd
+        end
+    end
+
     -- Add default arguments if they exist
     if tool.args and tool.args.default then
         cmd = cmd .. " " .. tool.args.default
@@ -71,12 +89,30 @@ local function build_command(tool)
         end
     end
 
-    -- Construct the final command with pre_cmd if it exists
-    if tool.pre_cmd then
-        cmd = tool.pre_cmd .. " && " .. cmd
+    return cmd
+end
+
+local function prepare_environment(tool)
+    local env = vim.fn.environ() -- Get current environment
+    local modified_env = vim.deepcopy(env)
+
+    if tool.env then
+        -- Set new environment variables
+        if tool.env.set then
+            for key, value in pairs(tool.env.set) do
+                modified_env[key] = value
+            end
+        end
+
+        -- Unset environment variables
+        if tool.env.unset then
+            for key, _ in pairs(tool.env.unset) do
+                modified_env[key] = nil
+            end
+        end
     end
 
-    return cmd
+    return modified_env
 end
 
 function M.restore_detached_buffer(stored_buf)
@@ -126,8 +162,14 @@ function M.open_floating_terminal(tool)
     -- Add window to manager
     window_manager.add_window(win, buf, tool)
 
+    -- Prepare environment variables
+    local env = prepare_environment(tool)
+
     local cmd = build_command(tool)
-    vim.fn.termopen(cmd, { cwd = vim.fn.getcwd() })
+    vim.fn.termopen(cmd, {
+        cwd = vim.fn.getcwd(),
+        env = env
+    })
     vim.cmd("startinsert")
 
     mappings.setup_mappings(buf, win, tool)

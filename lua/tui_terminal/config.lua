@@ -10,10 +10,19 @@ M.defaults = {
             name = "custom-tool",
             cmd = "mytool",
             args = {
-                default = "-f --color",  -- Default arguments
-                prompt = true,           -- Prompt for additional arguments
+                default = "-f --color",   -- Default arguments
+                prompt = true,            -- Prompt for additional arguments
             },
-            pre_cmd = "source ~/.toolrc", -- Script/command to run before starting the tool
+            pre_cmd = {                   -- Script with arguments
+                script = "~/.config/test.sh",
+                args = "--env dev --debug"
+            },
+            env = {
+                set = {                   -- Set these environment variables
+                },
+                unset = {                 -- Unset these environment variables
+                },
+            },
         }
     },
     -- Store detached buffers

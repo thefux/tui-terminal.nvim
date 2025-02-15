@@ -53,10 +53,19 @@ require("tui_terminal").setup({
         {
             name = "dev-tool",
             cmd = "tool",
-            pre_cmd = "source ~/.toolrc && export TOOL_ENV=dev",  -- Setup environment
+            pre_cmd = "~/.config/test.sh",  -- Run setup script before the command
             args = {
                 default = "--dev",
                 prompt = true,
+            },
+            env = {
+                set = {
+                    NODE_ENV = "development",
+                    DEBUG = "1",
+                },
+                unset = {
+                    PRODUCTION = true,
+                }
             },
         },
         {
@@ -76,6 +85,39 @@ require("tui_terminal").setup({
             cmd = "nu",
             vim_navigation = false,
             quit_key = false,        -- Let 'q' pass through to nu shell
+        },
+        {
+            name = "dev-server",
+            cmd = "npm run dev",
+            env = {
+                set = {
+                    NODE_ENV = "development",
+                    PORT = "3000",
+                    DEBUG = "1",
+                },
+                unset = {
+                    PRODUCTION = true,
+                    CACHE = true,
+                }
+            }
+        },
+        {
+            name = "dev-env",
+            cmd = "npm start",
+            pre_cmd = {
+                script = "~/.config/test.sh",
+                args = "--env development --setup-db"
+            },
+            env = {
+                set = {
+                    NODE_ENV = "development"
+                }
+            }
+        },
+        {
+            name = "custom-env",
+            cmd = "myapp",
+            pre_cmd = "export CUSTOM_VAR=value && source ~/.env",  -- Inline commands
         },
     },
 
@@ -152,6 +194,23 @@ require("tui_terminal").setup({
            -- Tools that need their native key bindings (including 'q')
            { name = "lazygit", cmd = "lazygit", vim_navigation = false, quit_key = false },
            { name = "k9s", cmd = "k9s", vim_navigation = false, quit_key = false },
+
+           -- Tool with custom environment
+           { 
+               name = "dev-server",
+               cmd = "npm run dev",
+               env = {
+                   set = {
+                       NODE_ENV = "development",
+                       PORT = "3000",
+                       DEBUG = "1",
+                   },
+                   unset = {
+                       PRODUCTION = true,
+                       CACHE = true,
+                   }
+               }
+           },
        }
    })
    ```
