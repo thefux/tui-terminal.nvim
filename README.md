@@ -159,8 +159,8 @@ require("tui_terminal").setup({
 3. Open Telescope picker directly:
 
    ```vim
-   :Telescope tui_terminal
-   :Telescope tui_terminal_detached  # List detached buffers
+   :Telescope tui_terminal tools
+   :Telescope tui_terminal detached  # List detached buffers
    ```
 
 4. Open a tool with arguments:
