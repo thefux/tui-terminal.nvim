@@ -8,6 +8,19 @@ local function has_telescope()
     return ok
 end
 
+local function handle_pre_cmd_nvim(config, callback)
+    if config.pre_cmd_nvim then
+        if type(config.pre_cmd_nvim) == "function" then
+            config.pre_cmd_nvim(callback)
+        else
+            vim.notify("pre_cmd_nvim must be a function", vim.log.levels.ERROR)
+            callback(nil)
+        end
+    else
+        callback(nil)
+    end
+end
+
 function M.setup(user_config)
     config.setup(user_config)
 
@@ -34,6 +47,21 @@ function M.setup(user_config)
             end
         end
     end, { nargs = "?" })
+end
+
+function M.launch_terminal(config)
+    handle_pre_cmd_nvim(config, function(result)
+        if result then
+            -- If pre_cmd_nvim provided a result, add it to args
+            if type(config.args) == "table" then
+                table.insert(config.args, result)
+            else
+                config.args = { result }
+            end
+        end
+        -- Continue with terminal launch
+        -- ... rest of launch code ...
+    end)
 end
 
 return M
