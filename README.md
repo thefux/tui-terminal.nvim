@@ -196,7 +196,7 @@ require("tui_terminal").setup({
            { name = "k9s", cmd = "k9s", vim_navigation = false, quit_key = false },
 
            -- Tool with custom environment
-           { 
+           {
                name = "dev-server",
                cmd = "npm run dev",
                env = {
@@ -242,6 +242,90 @@ require("tui_terminal").setup({
        }
    })
    ```
+
+## 🧬 Don't Repeat Yourself: Tool Inheritance
+
+You can create base configurations and inherit from them to avoid repetition:
+
+```lua
+require("tui_terminal").setup({
+    tools = {
+        -- Base configuration for Node.js tools
+        {
+            name = "node-base",
+            env = {
+                set = {
+                    NODE_ENV = "development",
+                    DEBUG = "1"
+                }
+            },
+            pre_cmd = {
+                script = "~/.config/nvim/scripts/node-setup.sh",
+                args = "--env dev"
+            }
+        },
+
+        -- Inherit environment and pre-command from node-base
+        {
+            name = "dev-server",
+            inherit = "node-base",  -- Inherit from node-base
+            cmd = "npm run dev",
+            args = {
+                default = "--port 3000"  -- Add specific arguments
+            }
+        },
+
+        -- Base configuration for Python tools
+        {
+            name = "python-base",
+            env = {
+                set = {
+                    PYTHONPATH = "./src",
+                    PYTHONUNBUFFERED = "1"
+                }
+            },
+            pre_cmd = "source .venv/bin/activate"
+        },
+
+        -- Multiple tools can inherit from the same base
+        {
+            name = "pytest",
+            inherit = "python-base",
+            cmd = "pytest",
+            args = {
+                default = "-v",
+                prompt = true
+            }
+        },
+        {
+            name = "flask-dev",
+            inherit = "python-base",
+            cmd = "flask run",
+            env = {
+                set = {
+                    FLASK_ENV = "development"  -- Merge with inherited env
+                }
+            }
+        }
+    }
+})
+```
+
+### Inheritance Rules:
+
+- The `name` field is never inherited
+- Child configurations override parent configurations
+- For nested tables (like `env.set`), child values are merged with parent values
+- You can inherit from any tool defined before the current one
+- Multiple tools can inherit from the same base configuration
+- Base configurations don't need to have a `cmd` field if they're just for inheritance
+
+This feature is particularly useful for:
+
+- Sharing common environment variables
+- Reusing setup scripts
+- Maintaining consistent configurations across similar tools
+- Creating template configurations for different types of tools
 
 ## 🐛 Troubleshooting
 
