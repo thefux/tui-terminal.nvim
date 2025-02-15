@@ -337,4 +337,4 @@ If your terminal isn't floating:
 
 ---
 
-Made with 🦋 by a developer who thinks terminals should float like butterflies!
+Made with 🦋 by a developer and their AI companion who think terminals should float like butterflies!
