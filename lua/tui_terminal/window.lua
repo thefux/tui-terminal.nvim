@@ -38,7 +38,9 @@ local function setup_autocmds(buf, win)
     vim.api.nvim_create_autocmd("BufWinLeave", {
         buffer = buf,
         callback = function()
-            if not vim.b[buf].tui_detach then
+            -- Only close if it's not a detach operation and either ctrl-c is allowed or this wasn't triggered by ctrl-c
+            if not vim.b[buf].tui_detach and 
+               (vim.b[buf].allow_ctrl_c_close or vim.v.event.abort ~= true) then
                 pcall(vim.api.nvim_win_close, win, true)
             end
         end,
@@ -226,6 +228,9 @@ function M._create_terminal_window(tool_config)
     -- Add window to manager
     window_manager.add_window(win, buf, tool_config)
 
+    -- Set a buffer variable to track if we should allow <C-c> to close
+    vim.b[buf].allow_ctrl_c_close = config.values.map_ctrl_c
+
     -- Prepare environment variables
     local env = prepare_environment(tool_config)
 
@@ -249,6 +254,16 @@ function M._create_terminal_window(tool_config)
     if tool_config.detach or vim.b[buf].tui_detach then
         utils.store_detached_buffer(buf, tool_config)
     end
+
+    -- Conditionally map <C-c> to close the window if enabled; otherwise ensure any existing mapping is removed.
+    if config.values.map_ctrl_c then
+        vim.api.nvim_buf_set_keymap(buf, "n", "<C-c>", ":close<CR>", {noremap=true, silent=true})
+    else
+        pcall(vim.api.nvim_buf_del_keymap, buf, "n", "<C-c>")
+    end
+
+    -- Always map <esc> to close the window as an alternative.
+    vim.api.nvim_buf_set_keymap(buf, "n", "<esc>", ":close<CR>", {noremap=true, silent=true})
 end
 
 return M

@@ -113,6 +113,8 @@ M.defaults = {
     },
     -- Store detached buffers
     detached_buffers = {},
+    -- Control whether <C-c> is mapped to close the window
+    map_ctrl_c = true,
     border = {
         -- Can be "none", "single", "double", "rounded", "solid", "shadow", or "custom"
         type = "rounded",

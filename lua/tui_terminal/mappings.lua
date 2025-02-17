@@ -1,3 +1,4 @@
+local config = require('tui_terminal.config')
 local M = {}
 local utils = require('tui_terminal.utils')
 local window_manager = require('tui_terminal.window_manager')
@@ -40,19 +41,8 @@ function M.setup_mappings(buf, win, tool)
 
     local close_opts = { buffer = buf, noremap = true, silent = true }
 
-    pcall(vim.keymap.del, 't', '<C-c>', { buffer = buf })
     pcall(vim.keymap.del, 't', '<C-d>', { buffer = buf })
     pcall(vim.keymap.del, 't', 'q', { buffer = buf })
-
-    vim.keymap.set('t', '<C-c>', function()
-        utils.remove_detached_buffer(buf)
-        window_manager.remove_window(win)
-        vim.b[buf].tui_detach = false
-        pcall(vim.api.nvim_buf_delete, buf, { force = true })
-        if api.nvim_win_is_valid(win) then
-            api.nvim_win_close(win, true)
-        end
-    end, close_opts)
 
     vim.keymap.set('t', '<C-d>', function()
         vim.b[buf].tui_detach = true
